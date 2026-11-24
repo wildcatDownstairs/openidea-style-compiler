@@ -16,6 +16,12 @@ Stylus file compiles it to CSS, and compile errors show in the editor and the Pr
 
 Needs OpenIDEA 0.1.49 or later (plugin API 1.13).
 
+![An error in the Sass partial _vars.scss, in the editor and the Problems view, after saving it](https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/error-in-partial.png)
+
+![After Compile All Stylesheets: main.css, app.css and main.css beside the Sass, Less and Stylus entry files, none beside the partials](https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/compile-all.png)
+
+<img alt="The permissions dialog: four optional process permissions, unticked, and the two required ones" src="https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/permissions.png" width="420"> <img alt="The settings page: Compile on save, per-language switches, output directory, source maps, minify, files not to compile" src="https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/settings.png" width="420">
+
 ## Permissions
 
 | Permission | For |

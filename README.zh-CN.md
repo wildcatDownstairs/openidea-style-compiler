@@ -14,6 +14,12 @@
 
 需要 OpenIDEA 0.1.49 及以后（插件 API 1.13）。
 
+![保存 Sass 公共文件 _vars.scss 后，错误显示在编辑器和 Problems 面板里](https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/error-in-partial.png)
+
+![执行 Compile All Stylesheets 后，Sass、Less、Stylus 的入口文件旁边都生成了 CSS，公共文件旁边没有](https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/compile-all.png)
+
+<img alt="授权对话框：四个可选的进程权限默认不勾，两个必需权限" src="https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/permissions.png" width="420"> <img alt="设置页：保存时编译、按语言开关、输出目录、source map、压缩、不编译的文件" src="https://raw.githubusercontent.com/wildcatDownstairs/openidea-style-compiler/main/docs/settings.png" width="420">
+
 ## 权限
 
 | 权限 | 用途 |
