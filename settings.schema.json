@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "mode": {
+      "type": "string",
+      "title": "Compile on save",
+      "description": "auto: not in projects whose package.json uses Vite, webpack, Parcel, Next.js, Nuxt or Angular CLI, which build their styles themselves. The commands compile in every mode.",
+      "enum": ["auto", "always", "off"],
+      "default": "auto"
+    },
+    "less": {
+      "type": "boolean",
+      "title": "Compile Less on save",
+      "default": true
+    },
+    "sass": {
+      "type": "boolean",
+      "title": "Compile Sass/SCSS on save",
+      "default": true
+    },
+    "stylus": {
+      "type": "boolean",
+      "title": "Compile Stylus on save",
+      "default": true
+    },
+    "outDir": {
+      "type": "string",
+      "title": "Output directory",
+      "description": "Relative to the project root, keeping each file's folders (src/a.scss → <dir>/src/a.css); empty writes next to the source.",
+      "default": ""
+    },
+    "sourceMap": {
+      "type": "boolean",
+      "title": "Write source maps",
+      "default": false
+    },
+    "minify": {
+      "type": "boolean",
+      "title": "Minify the CSS",
+      "default": false
+    },
+    "ignore": {
+      "type": "string",
+      "multiline": true,
+      "title": "Files not to compile",
+      "description": "One project-relative glob per line (** crosses folders).",
+      "default": "node_modules/**"
+    }
+  }
+}

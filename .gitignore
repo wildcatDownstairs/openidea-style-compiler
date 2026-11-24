@@ -1,0 +1,4 @@
+/target
+# Built by `openidea-plugin build` before packing
+/dist
+*.oiplugin
