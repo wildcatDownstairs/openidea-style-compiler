@@ -1,12 +1,12 @@
 id = "wildcatdownstairs.style-compiler"
 name = "Style Compiler"
-version = "0.1.1"
+version = "0.1.2"
 description = "Compiles Less, Sass/SCSS and Stylus to CSS when you save them, with errors in the editor and the Problems view. / 保存 Less、Sass/SCSS、Stylus 时编译成 CSS，错误显示在编辑器和 Problems 面板里。"
 authors = ["wildcatDownstairs"]
 homepage = "https://github.com/wildcatDownstairs/openidea-style-compiler"
 license = "MIT"
 icon = "icon.svg"
-change-notes = "0.1.1 — Adds the plugin icon. / 加上插件图标。"
+change-notes = "0.1.2 — Adds the plugin icon. Saving a partial created after the files that load it now recompiles them. / 加上插件图标；公共文件比引用它的文件后创建时，保存它也会重新编译那些文件。"
 categories = ["languages", "tools"]
 # Built against the SDK of OpenIDEA 0.1.49 (plugin API 1.13).
 engines.openidea = "^1.13"

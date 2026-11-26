@@ -102,6 +102,8 @@ pub struct Graph {
     files: BTreeMap<String, String>,
     /// What each file loads (normalized paths).
     imports: BTreeMap<String, BTreeSet<String>>,
+    /// What each file loads as written, to resolve again when files come and go.
+    specs: BTreeMap<String, Vec<String>>,
 }
 
 impl Graph {
@@ -125,16 +127,36 @@ impl Graph {
     pub fn read(&mut self, project: &Project, path: &str) {
         let Some(lang) = Lang::of(path) else { return };
         let key = normalize(path);
-        self.files.insert(key.clone(), path.to_owned());
+        let joined = self.files.insert(key.clone(), path.to_owned()).is_none();
         let text = project.read_file(path).unwrap_or_default();
-        let deps = import_specs(&text, lang).iter().filter_map(|s| resolve(&key, s, lang, &self.files)).collect();
-        self.imports.insert(key, deps);
+        self.specs.insert(key.clone(), import_specs(&text, lang));
+        // A new file may be what another file's import names.
+        if joined { self.relink() } else { self.link(&key) }
     }
 
     pub fn remove(&mut self, path: &str) {
         let key = normalize(path);
-        self.files.remove(&key);
-        self.imports.remove(&key);
+        if self.files.remove(&key).is_some() {
+            self.specs.remove(&key);
+            self.imports.remove(&key);
+            self.relink();
+        }
+    }
+
+    /// Resolves what `key` loads among the files known now.
+    fn link(&mut self, key: &str) {
+        let Some(lang) = Lang::of(key) else { return };
+        let specs = self.specs.get(key).into_iter().flatten();
+        let deps = specs.filter_map(|s| resolve(key, s, lang, &self.files)).collect();
+        self.imports.insert(key.to_owned(), deps);
+    }
+
+    // ponytail: every import is resolved again when a file comes or goes, from the specs kept (no reads).
+    fn relink(&mut self) {
+        let keys: Vec<String> = self.specs.keys().cloned().collect();
+        for key in keys {
+            self.link(&key);
+        }
     }
 
     /// Every file to compile, for Compile All: what [`Self::targets`] calls entries.

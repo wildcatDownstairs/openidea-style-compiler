@@ -926,6 +926,41 @@ mod tests {
     }
 
     #[test]
+    fn links_an_import_once_the_partial_it_names_is_created() {
+        let host = MockHost::install().with_capabilities(&["project.read", "events", "process:sass"]);
+        host.add_file("app.scss", "@use 'vars';\n");
+        host.on_process("sass", |_, _| Ok(ok()));
+        let mut plugin = StyleCompiler::default();
+        let save = |plugin: &mut StyleCompiler, path: &str| {
+            plugin.handle_events(&[Event::FileSaved(path.into())], &host.invocation())
+        };
+        // Saved before `_vars.scss` exists: its import resolves to nothing.
+        save(&mut plugin, "/project/app.scss");
+        assert_eq!(compiled(&host), ["/project/app.scss"]);
+
+        host.add_file("_vars.scss", "$c: red;\n");
+        let created = openidea_plugin::FilesChanged {
+            created: vec!["/project/_vars.scss".into()],
+            modified: Vec::new(),
+            removed: Vec::new(),
+        };
+        plugin.handle_events(&[Event::FilesChanged(created)], &host.invocation());
+        save(&mut plugin, "/project/_vars.scss");
+        assert_eq!(compiled(&host)[1..], ["/project/app.scss"]);
+
+        // Once `_vars.scss` is gone, the same import resolves to `vars/_index.scss`.
+        host.add_file("vars/_index.scss", "$c: blue;\n");
+        let moved = openidea_plugin::FilesChanged {
+            created: vec!["/project/vars/_index.scss".into()],
+            modified: Vec::new(),
+            removed: vec!["/project/_vars.scss".into()],
+        };
+        plugin.handle_events(&[Event::FilesChanged(moved)], &host.invocation());
+        save(&mut plugin, "/project/vars/_index.scss");
+        assert_eq!(compiled(&host)[2..], ["/project/app.scss"]);
+    }
+
+    #[test]
     fn the_command_on_a_partial_compiles_its_users() {
         let host = MockHost::install().with_capabilities(&["project.read", "events", "process:sass"]);
         host.add_file("_vars.scss", "$c: red;\n");
